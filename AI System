@@ -1,0 +1,203 @@
+# ======================================
+# TARS: ENGINEERING AI ASSISTANT
+# Focus: Academics, Quizzes, Essays, Engineering Solutions
+# ======================================
+
+import math
+import json
+
+class TARS:
+    """
+    TARS — Academic AI Assistant
+    Specialized for:
+      - Artificial Intelligence
+      - Computer Engineering
+      - Space Engineering
+    Functions:
+      - Quiz generation and grading
+      - Essay writing and structure guidance
+      - Engineering problem solving
+    """
+
+    def __init__(self, name="TARS"):
+        self.name = name
+        self.context = {}
+        self.knowledge = self._load_knowledge()
+
+    # ================================
+    # KNOWLEDGE BASE
+    # ================================
+    def _load_knowledge(self):
+        return {
+            "AI": {
+                "DEFINITION": "AI is the simulation of human intelligence in machines that can learn and make decisions.",
+                "NEURAL_NETWORK": "A system of connected nodes that processes information like a human brain.",
+                "DEEP_LEARNING": "Uses multiple layers of neural networks for complex data tasks.",
+                "COMMON_ALGORITHMS": [
+                    "Linear Regression",
+                    "Decision Trees",
+                    "Convolutional Neural Networks",
+                    "Recurrent Neural Networks",
+                    "K-Means Clustering"
+                ],
+                "APPLICATIONS": [
+                    "Autonomous Systems",
+                    "Robotics",
+                    "Natural Language Processing",
+                    "Computer Vision"
+                ]
+            },
+            "COMPUTER_ENGINEERING": {
+                "LOGIC_GATES": {
+                    "AND": "HIGH only if both inputs are HIGH.",
+                    "OR": "HIGH if at least one input is HIGH.",
+                    "XOR": "HIGH if inputs differ.",
+                    "NOT": "Inverts input signal."
+                },
+                "CPU_ARCHITECTURE": {
+                    "COMPONENTS": "ALU, Control Unit, Registers, Cache.",
+                    "PIPELINING": "Executes multiple instruction stages simultaneously.",
+                    "MEMORY_HIERARCHY": "Registers → Cache → RAM → Disk."
+                },
+                "NETWORKING": {
+                    "OSI_MODEL": "Defines 7 layers of communication, from Physical to Application.",
+                    "TCP_VS_UDP": "TCP ensures reliability, UDP ensures speed."
+                },
+                "MICROCONTROLLERS": {
+                    "DEFINITION": "Integrated circuit for embedded control systems.",
+                    "EXAMPLES": "Arduino, ESP32, Raspberry Pi."
+                }
+            },
+            "SPACE_ENGINEERING": {
+                "ROCKET_EQUATION": "Δv = Ve * ln(M0 / Mf)",
+                "KEPLER_LAWS": [
+                    "Planets move in elliptical orbits.",
+                    "Equal areas in equal times.",
+                    "Period² ∝ semi-major axis³."
+                ],
+                "ESCAPE_VELOCITY": "v = √(2GM / r)",
+                "PROPULSION": {
+                    "CHEMICAL": "Uses combustion of propellants.",
+                    "ION": "Uses electric fields for acceleration.",
+                    "NUCLEAR": "Uses fission for propulsion."
+                },
+                "SYSTEMS": {
+                    "POWER": "Solar panels or RTGs provide energy.",
+                    "COMMUNICATION": "Handles data transfer with antennas.",
+                    "THERMAL_CONTROL": "Regulates spacecraft temperature.",
+                    "ATTITUDE_CONTROL": "Maintains orientation using thrusters or reaction wheels."
+                }
+            },
+            "ESSAY_GUIDE": {
+                "INTRODUCTION": "Start with context, define the topic, and state your thesis.",
+                "BODY": "Discuss theories, data, and examples logically.",
+                "CONCLUSION": "Summarize findings and restate the key insight.",
+                "STYLE": {
+                    "TONE": "Formal, concise, and technical.",
+                    "AVOID": ["slang", "fluff", "bias"],
+                    "FOCUS": ["clarity", "accuracy", "logic"]
+                }
+            }
+        }
+
+    # ================================
+    # QUIZ FUNCTIONS
+    # ================================
+    def generate_quiz(self, topic, count=5):
+        quiz = []
+        for i in range(1, count + 1):
+            quiz.append({
+                "id": f"{topic[:3].upper()}-{i}",
+                "question": f"SAMPLE QUESTION {i} ON {topic.upper()}",
+                "choices": ["A", "B", "C", "D"],
+                "answer": "A"
+            })
+        return quiz
+
+    def grade_quiz(self, quiz, responses):
+        total = len(quiz)
+        correct = 0
+        for q in quiz:
+            if responses.get(q["id"]) == q["answer"]:
+                correct += 1
+        return {"score": correct, "total": total, "percent": round(correct / total * 100, 2)}
+
+    # ================================
+    # ESSAY FUNCTIONS
+    # ================================
+    def write_essay(self, topic, word_count=300):
+        guide = self.knowledge["ESSAY_GUIDE"]
+        intro = guide["INTRODUCTION"]
+        body = guide["BODY"]
+        conclusion = guide["CONCLUSION"]
+        return (
+            f"TOPIC: {topic}\n\n"
+            f"INTRODUCTION: {intro}\n\n"
+            f"BODY: {body}\n\n"
+            f"CONCLUSION: {conclusion}\n\n"
+            f"TARGET WORD COUNT: {word_count}"
+        )
+
+    # ================================
+    # ENGINEERING SOLVERS
+    # ================================
+    def solve_equation(self, expression, variables=None):
+        if variables is None:
+            variables = {}
+        safe = {**variables, "math": math}
+        try:
+            value = eval(expression, {"__builtins__": {}}, safe)
+            return {"expression": expression, "result": value}
+        except Exception as e:
+            return {"error": str(e)}
+
+    def solve_parallel_resistance(self, resistances):
+        try:
+            inv_sum = sum(1/r for r in resistances)
+            return {"R_total": 1/inv_sum, "formula": "1 / (1/R1 + 1/R2 + ...)"}
+        except Exception as e:
+            return {"error": str(e)}
+
+    # ================================
+    # KNOWLEDGE ACCESS FUNCTIONS
+    # ================================
+    def get_ai_info(self, key):
+        return self.knowledge["AI"].get(key.upper(), "AI TOPIC NOT FOUND.")
+
+    def get_compeng_info(self, category, key):
+        try:
+            return self.knowledge["COMPUTER_ENGINEERING"][category.upper()][key.upper()]
+        except KeyError:
+            return "COMPUTER ENGINEERING TOPIC NOT FOUND."
+
+    def get_space_info(self, key):
+        return self.knowledge["SPACE_ENGINEERING"].get(key.upper(), "SPACE TOPIC NOT FOUND.")
+
+    def get_essay_tip(self, section):
+        return self.knowledge["ESSAY_GUIDE"].get(section.upper(), "SECTION NOT FOUND.")
+
+
+# ================================
+# USAGE EXAMPLES
+# ================================
+if __name__ == "__main__":
+    tars = TARS()
+
+    print("\n=== AI REFERENCE ===")
+    print(tars.get_ai_info("neural_network"))
+
+    print("\n=== COMPUTER ENGINEERING REFERENCE ===")
+    print(tars.get_compeng_info("logic_gates", "xor"))
+
+    print("\n=== SPACE ENGINEERING REFERENCE ===")
+    print(tars.get_space_info("rocket_equation"))
+
+    print("\n=== ESSAY SAMPLE ===")
+    print(tars.write_essay("The Role of AI in Modern Engineering", 300))
+
+    print("\n=== QUIZ SAMPLE ===")
+    quiz = tars.generate_quiz("AI", 3)
+    print(quiz)
+
+    print("\n=== SOLVE SAMPLE ===")
+    print(tars.solve_equation("V / I", {"V": 12, "I": 3}))
